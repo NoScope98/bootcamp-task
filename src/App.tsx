@@ -1,58 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useEffect } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { NavBar } from './components/navbar/NavBar';
+// import { TodoList } from './components/todos/TodoList';
+import { routes } from './utils/constants';
+import { useAppSelector } from './app/hooks';
+import { LoginForm } from './components/auth/LoginForm';
+import { PrivateRoute } from './components/common/PrivateRoute';
+import { checkAuthorization } from './components/auth/authSlice';
+import { RootState } from './app/store';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+export const App = () => {
+  const { name, role, isAuthenticated } = useAppSelector(
+    (state: RootState) => state.auth
   );
-}
 
-export default App;
+  useEffect(() => {
+    // dispatch(checkAuthorization());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <>
+      <BrowserRouter>
+        {isAuthenticated && (
+          <>
+            <NavBar />
+            <div>name: {name}</div>
+            <div>role: {role}</div>
+            <hr />
+          </>
+        )}
+        <main>
+          <Switch>
+            <Route path={routes.login}>
+              <LoginForm />
+            </Route>
+            <PrivateRoute path={routes.todos}>
+              <div>Todos</div>
+            </PrivateRoute>
+            <PrivateRoute path={routes.users}>
+              <div>Users</div>
+            </PrivateRoute>
+            <PrivateRoute path={routes.root}>
+              <Redirect to={routes.todos} />
+            </PrivateRoute>
+          </Switch>
+        </main>
+      </BrowserRouter>
+    </>
+  );
+};
