@@ -23,8 +23,6 @@ export const signIn = createAsyncThunk<IAuthData, ILoginRequest>(
   async (args, thunkAPI) => {
     try {
       const response = await authApi.login(args);
-      console.log('try');
-
       return response.data;
     } catch (err) {
       console.log('err', err);
@@ -52,7 +50,8 @@ export const checkAuthorization = createAsyncThunk<IAuthData, undefined>(
       const response = await authApi.me();
       return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      const { data, status } = err.response;
+      return thunkAPI.rejectWithValue({ data, status });
     }
   }
 );
@@ -71,9 +70,6 @@ const slice = createSlice({
       })
       .addCase(signIn.rejected, (state, action) => {
         state.status = FetchingStatuses.Rejected;
-        state.name = initialState.name;
-        state.role = initialState.role;
-        state.isAuthenticated = false;
       })
       .addCase(signIn.pending, (state, action) => {
         state.status = FetchingStatuses.Pending;
@@ -96,11 +92,14 @@ const slice = createSlice({
         state.role = action.payload.role;
         state.isAuthenticated = true;
       })
-      .addCase(checkAuthorization.rejected, (state, action) => {
+      .addCase(checkAuthorization.rejected, (state, action: any) => {
         state.status = FetchingStatuses.Rejected;
-        state.name = initialState.name;
-        state.role = initialState.role;
-        state.isAuthenticated = false;
+
+        if (action.payload.status === 401) {
+          state.name = initialState.name;
+          state.role = initialState.role;
+          state.isAuthenticated = false;
+        }
       })
       .addCase(checkAuthorization.pending, (state, action) => {
         state.status = FetchingStatuses.Pending;

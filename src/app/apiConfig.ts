@@ -3,10 +3,11 @@ import axios from 'axios';
 const config = {
   baseURL: 'http://localhost:3000/api/v1',
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 };
 
 const request = axios.create(config);
-const authorizedRequest = axios.create({ ...config, withCredentials: true });
+const authorizedRequest = axios.create(config);
 
 const handleError = (error: any) => {
   console.log('error: ' + error);
@@ -15,7 +16,7 @@ const handleError = (error: any) => {
 
 authorizedRequest.interceptors.request.use(async (config) => {
   try {
-    await request.get('/me', { withCredentials: true });
+    await request.get('/me');
     return config;
   } catch (error) {
     return handleError(error);
@@ -26,5 +27,7 @@ authorizedRequest.interceptors.response.use(
   (response) => response,
   handleError
 );
+
+request.interceptors.response.use((response) => response, handleError);
 
 export { request, authorizedRequest };

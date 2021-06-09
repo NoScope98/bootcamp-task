@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { useAppDispatch } from '../../app/hooks';
+import { useLocation, useHistory, Redirect } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { signIn } from './authSlice';
 import { routes } from '../../utils/constants';
+import { RootState } from '../../app/store';
 
 interface LocationState {
   from: {
@@ -14,6 +15,8 @@ export const LoginForm = () => {
   const history = useHistory();
   const location = useLocation<LocationState>();
   const dispatch = useAppDispatch();
+
+  const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -38,6 +41,10 @@ export const LoginForm = () => {
       history.replace(from);
     }
   };
+
+  if (isAuthenticated) {
+    return <Redirect to={routes.root} />;
+  }
 
   return (
     <div className="login-form">
