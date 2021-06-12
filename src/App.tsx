@@ -2,23 +2,26 @@ import { useEffect } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { NavBar } from './components/navbar/NavBar';
 // import { TodoList } from './components/todos/TodoList';
-import { routes } from './utils/constants';
+import { FetchingStatuses, routes } from './utils/constants';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { LoginForm } from './components/loginForm/LoginForm';
 import { PrivateRoute } from './components/common/PrivateRoute';
+import { Loader } from './components/common/loader/Loader';
 import { checkAuthorization } from './auth/authSlice';
 import { RootState } from './app/store';
 
 export const App = () => {
   const dispatch = useAppDispatch();
 
-  const { name, role, isAuthenticated } = useAppSelector(
+  const { name, role, isAuthenticated, status } = useAppSelector(
     (state: RootState) => state.auth
   );
 
   useEffect(() => {
     dispatch(checkAuthorization());
   }, [dispatch]);
+
+  const isLoading = status === FetchingStatuses.Pending;
 
   return (
     <>
@@ -31,7 +34,9 @@ export const App = () => {
             <hr />
           </>
         )}
-        <main>
+        <main className="content">
+          <Loader show={isLoading} />
+
           <Switch>
             <Route path={routes.login}>
               <LoginForm />
