@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
-import { FetchingStatuses } from '../../utils/constants';
-import { IAuthData, ILoginRequest } from '../../utils/types';
+import { RootState, AppThunk } from '../app/store';
+import { FetchingStatuses } from '../utils/constants';
+import { IAuthData, ILoginRequest } from '../utils/types';
 import { authApi } from './authApi';
 
 const sliceName = 'auth';

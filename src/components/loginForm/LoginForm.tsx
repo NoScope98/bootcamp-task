@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useHistory, Redirect } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { signIn } from './authSlice';
+import { signIn } from '../../auth/authSlice';
 import { routes } from '../../utils/constants';
 import { RootState } from '../../app/store';
 

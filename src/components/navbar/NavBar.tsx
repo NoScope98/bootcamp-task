@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import { routes } from '../../utils/constants';
-import { signOut } from '../auth/authSlice';
+import { signOut } from '../../auth/authSlice';
 
 export const NavBar = () => {
   const dispatch = useAppDispatch();
@@ -21,8 +21,8 @@ export const NavBar = () => {
             <Link to={routes.users}>Users</Link>
           </li>
         </ul>
-        <button onClick={handleLogoutClick}>Logout</button>
       </nav>
+      <button onClick={handleLogoutClick}>Logout</button>
     </header>
   );
 };

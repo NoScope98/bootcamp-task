@@ -4,9 +4,9 @@ import { NavBar } from './components/navbar/NavBar';
 // import { TodoList } from './components/todos/TodoList';
 import { routes } from './utils/constants';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { LoginForm } from './components/auth/LoginForm';
+import { LoginForm } from './components/loginForm/LoginForm';
 import { PrivateRoute } from './components/common/PrivateRoute';
-import { checkAuthorization } from './components/auth/authSlice';
+import { checkAuthorization } from './auth/authSlice';
 import { RootState } from './app/store';
 
 export const App = () => {
@@ -18,8 +18,7 @@ export const App = () => {
 
   useEffect(() => {
     dispatch(checkAuthorization());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
