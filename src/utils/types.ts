@@ -14,3 +14,8 @@ export interface ILoginRequest {
   login: string;
   password: string;
 }
+
+export interface IErrorResponse {
+  code: number;
+  message: string;
+}
