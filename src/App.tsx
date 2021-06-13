@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { NavBar } from './components/navbar/NavBar';
-// import { TodoList } from './components/todos/TodoList';
+import { TodoList } from './components/todos/TodoList';
 import { FetchingStatuses, routes } from './utils/constants';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { LoginForm } from './components/loginForm/LoginForm';
@@ -45,7 +45,7 @@ export const App = () => {
               <LoginForm />
             </Route>
             <PrivateRoute path={routes.todos}>
-              <div>Todos</div>
+              <TodoList />
             </PrivateRoute>
             <PrivateRoute path={routes.users}>
               <div>Users</div>
