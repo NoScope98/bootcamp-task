@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useLocation, useHistory, Redirect } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { signIn } from '../../auth/authSlice';
-import { routes } from '../../utils/constants';
+import { FetchingStatuses, routes } from '../../utils/constants';
 import { RootState } from '../../app/store';
+import { handleError } from '../../utils/functionWrappers';
 
 interface LocationState {
   from: {
@@ -16,7 +17,9 @@ export const LoginForm = () => {
   const location = useLocation<LocationState>();
   const dispatch = useAppDispatch();
 
-  const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
+  const { isAuthenticated, status } = useAppSelector(
+    (state: RootState) => state.auth
+  );
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -33,10 +36,11 @@ export const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(login, password);
-    const resultAction = await dispatch(signIn({ login, password }));
+    if (status === FetchingStatuses.Pending) return;
 
-    if (signIn.fulfilled.match(resultAction)) {
+    await handleError(dispatch(signIn({ login, password })));
+
+    if (status === FetchingStatuses.Fulfilled) {
       const from = location.state.from || { pathname: routes.root };
       history.replace(from);
     }
@@ -67,7 +71,7 @@ export const LoginForm = () => {
             onChange={handlePasswordChange}
           />
         </div>
-        <input type="submit" value="Войти" disabled={submitDisabled} />
+        <input type="submit" value="Sign in" disabled={submitDisabled} />
       </form>
     </div>
   );

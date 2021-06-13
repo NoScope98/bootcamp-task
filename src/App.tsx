@@ -9,6 +9,9 @@ import { PrivateRoute } from './components/common/PrivateRoute';
 import { Loader } from './components/common/loader/Loader';
 import { checkAuthorization } from './auth/authSlice';
 import { RootState } from './app/store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { handleError } from './utils/functionWrappers';
 
 export const App = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +21,7 @@ export const App = () => {
   );
 
   useEffect(() => {
-    dispatch(checkAuthorization());
+    handleError(dispatch(checkAuthorization()));
   }, [dispatch]);
 
   const isLoading = status === FetchingStatuses.Pending;
@@ -26,6 +29,8 @@ export const App = () => {
   return (
     <>
       <BrowserRouter>
+        <Loader show={isLoading} />
+
         {isAuthenticated && (
           <>
             <NavBar />
@@ -35,8 +40,6 @@ export const App = () => {
           </>
         )}
         <main className="content">
-          <Loader show={isLoading} />
-
           <Switch>
             <Route path={routes.login}>
               <LoginForm />
@@ -52,6 +55,8 @@ export const App = () => {
             </PrivateRoute>
           </Switch>
         </main>
+
+        <ToastContainer position="bottom-right" />
       </BrowserRouter>
     </>
   );
