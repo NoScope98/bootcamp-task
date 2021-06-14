@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
   isFulfilled,
   isPending,
-  isRejectedWithValue,
+  isRejected,
 } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { todosApi } from './todosApi';
@@ -34,7 +34,8 @@ export const fetchAll = createAsyncThunk<ITodo[], undefined>(
       const response = await todosApi.getAll();
       return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      const { status, message } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
     }
   }
 );
@@ -46,7 +47,8 @@ export const create = createAsyncThunk<ITodo, ITodoCreateRequest>(
       const response = await todosApi.create(args);
       return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      const { status, message } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
     }
   }
 );
@@ -58,7 +60,8 @@ export const fetchById = createAsyncThunk<ITodo, ITodo['id']>(
       const response = await todosApi.getById(args);
       return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      const { status, message } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
     }
   }
 );
@@ -72,7 +75,8 @@ export const update = createAsyncThunk<
     const response = await todosApi.update(id, params);
     return response.data;
   } catch (err) {
-    return thunkAPI.rejectWithValue(err.response.data);
+    const { status, message } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
   }
 });
 
@@ -83,7 +87,8 @@ export const remove = createAsyncThunk<undefined, { id: ITodo['id'] }>(
       const response = await todosApi.delete(args.id);
       return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      const { status, message } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
     }
   }
 );
@@ -117,7 +122,7 @@ export const slice = createSlice({
       .addMatcher(isPending, (state) => {
         state.status = FetchingStatuses.Pending;
       })
-      .addMatcher(isRejectedWithValue, (state) => {
+      .addMatcher(isRejected, (state) => {
         state.status = FetchingStatuses.Rejected;
       });
   },

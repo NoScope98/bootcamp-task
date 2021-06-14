@@ -1,5 +1,17 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../app/store';
+import {
+  createAsyncThunk,
+  createSlice,
+  isFulfilled,
+  isPending,
+  isRejected,
+} from '@reduxjs/toolkit';
+import {
+  fetchAll,
+  create,
+  fetchById,
+  update,
+  remove,
+} from '../components/todos/todosSlice';
 import { FetchingStatuses, Roles } from '../utils/constants';
 import { IAuthData, ILoginRequest } from '../utils/types';
 import { authApi } from './authApi';
@@ -62,47 +74,46 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(signIn.fulfilled, (state, action) => {
-        state.status = FetchingStatuses.Fulfilled;
         state.name = action.payload.name;
         state.role = action.payload.role;
         state.isAuthenticated = true;
       })
-      .addCase(signIn.rejected, (state, action) => {
-        state.status = FetchingStatuses.Rejected;
-      })
-      .addCase(signIn.pending, (state, action) => {
-        state.status = FetchingStatuses.Pending;
-      })
-
       .addCase(signOut.fulfilled, (state, action) => {
-        state.status = FetchingStatuses.Fulfilled;
         state.isAuthenticated = false;
       })
-      .addCase(signOut.rejected, (state, action) => {
-        state.status = FetchingStatuses.Rejected;
-      })
-      .addCase(signOut.pending, (state, action) => {
-        state.status = FetchingStatuses.Pending;
-      })
-
       .addCase(checkAuthorization.fulfilled, (state, action) => {
-        state.status = FetchingStatuses.Fulfilled;
         state.name = action.payload.name;
         state.role = action.payload.role;
         state.isAuthenticated = true;
       })
       .addCase(checkAuthorization.rejected, (state, action: any) => {
-        state.status = FetchingStatuses.Rejected;
-
         if (action.payload.status === 401) {
           state.name = initialState.name;
           state.role = initialState.role;
           state.isAuthenticated = false;
         }
       })
-      .addCase(checkAuthorization.pending, (state, action) => {
+
+      .addMatcher(isFulfilled(signIn, signOut, checkAuthorization), (state) => {
+        state.status = FetchingStatuses.Fulfilled;
+      })
+      .addMatcher(isPending(signIn, signOut, checkAuthorization), (state) => {
         state.status = FetchingStatuses.Pending;
-      });
+      })
+      .addMatcher(isRejected(signIn, signOut, checkAuthorization), (state) => {
+        state.status = FetchingStatuses.Rejected;
+      })
+
+      .addMatcher(
+        isRejected(fetchAll, create, fetchById, update, remove),
+        (state, action: any) => {
+          if (action.payload.status === 401) {
+            state.name = initialState.name;
+            state.role = initialState.role;
+            state.isAuthenticated = false;
+          }
+        }
+      );
   },
 });
 
