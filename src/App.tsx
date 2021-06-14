@@ -12,11 +12,12 @@ import { RootState } from './app/store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { handleError } from './utils/functionWrappers';
+import { Users } from './components/users/Users';
 
 export const App = () => {
   const dispatch = useAppDispatch();
 
-  const { name, role, isAuthenticated, status } = useAppSelector(
+  const { isAuthenticated, status } = useAppSelector(
     (state: RootState) => state.auth
   );
 
@@ -31,14 +32,7 @@ export const App = () => {
       <BrowserRouter>
         <Loader show={isLoading} />
 
-        {isAuthenticated && (
-          <>
-            <NavBar />
-            <div>name: {name}</div>
-            <div>role: {role}</div>
-            <hr />
-          </>
-        )}
+        {isAuthenticated && <NavBar />}
         <main className="content">
           <Switch>
             <Route path={routes.login}>
@@ -47,8 +41,8 @@ export const App = () => {
             <PrivateRoute path={routes.todos}>
               <TodoList />
             </PrivateRoute>
-            <PrivateRoute path={routes.users}>
-              <div>Users</div>
+            <PrivateRoute onlyForAdmin path={routes.users}>
+              <Users />
             </PrivateRoute>
             <PrivateRoute path={routes.root}>
               <Redirect to={routes.todos} />

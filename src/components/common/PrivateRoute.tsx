@@ -1,17 +1,29 @@
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { Redirect, Route } from 'react-router-dom';
-import { routes } from '../../utils/constants';
+import { Roles, routes } from '../../utils/constants';
 
 interface IPrivateRouteProps {
   path: string;
+  onlyForAdmin?: boolean;
 }
 
 export const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
   children,
   path,
+  onlyForAdmin,
 }) => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+
+  if (onlyForAdmin && role === Roles.User) {
+    return (
+      <Redirect
+        to={{
+          pathname: routes.root,
+        }}
+      />
+    );
+  }
 
   return (
     <Route
