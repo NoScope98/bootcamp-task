@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../app/store';
-import { FetchingStatuses } from '../utils/constants';
+import { FetchingStatuses, Roles } from '../utils/constants';
 import { IAuthData, ILoginRequest } from '../utils/types';
 import { authApi } from './authApi';
 
@@ -13,7 +13,7 @@ export interface IAuthState extends IAuthData {
 
 const initialState: IAuthState = {
   name: '',
-  role: '',
+  role: Roles.User,
   status: FetchingStatuses.Idle,
   isAuthenticated: false,
 };
@@ -25,7 +25,6 @@ export const signIn = createAsyncThunk<IAuthData, ILoginRequest>(
       const response = await authApi.login(args);
       return response.data;
     } catch (err) {
-      console.log('err', err);
       return thunkAPI.rejectWithValue(err.response.data);
     }
   }

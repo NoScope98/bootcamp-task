@@ -11,3 +11,8 @@ export enum FetchingStatuses {
   Fulfilled = 'fulfilled',
   Idle = 'idle',
 }
+
+export enum Roles {
+  Admin = 'admin',
+  User = 'user',
+}

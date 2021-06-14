@@ -1,3 +1,5 @@
+import { Roles } from './constants';
+
 export interface ITodo {
   id: number;
   title: string;
@@ -17,7 +19,7 @@ export interface ITodoUpdateRequest {
 
 export interface IAuthData {
   name: string;
-  role: string;
+  role: Roles;
 }
 
 export interface ILoginRequest {
