@@ -116,15 +116,24 @@ export const slice = createSlice({
         adapter.removeOne(state, action.meta.arg.id);
       })
 
-      .addMatcher(isFulfilled, (state) => {
-        state.status = FetchingStatuses.Fulfilled;
-      })
-      .addMatcher(isPending, (state) => {
-        state.status = FetchingStatuses.Pending;
-      })
-      .addMatcher(isRejected, (state) => {
-        state.status = FetchingStatuses.Rejected;
-      });
+      .addMatcher(
+        isFulfilled(fetchAll, create, fetchById, update, remove),
+        (state) => {
+          state.status = FetchingStatuses.Fulfilled;
+        }
+      )
+      .addMatcher(
+        isPending(fetchAll, create, fetchById, update, remove),
+        (state) => {
+          state.status = FetchingStatuses.Pending;
+        }
+      )
+      .addMatcher(
+        isRejected(fetchAll, create, fetchById, update, remove),
+        (state) => {
+          state.status = FetchingStatuses.Rejected;
+        }
+      );
   },
 });
 
