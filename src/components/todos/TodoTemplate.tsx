@@ -37,9 +37,7 @@ export const TodoTemplate: React.FunctionComponent<ITodoTemplateProps> = ({
     await handleError(dispatch(create({ title, description })));
 
     if (status === FetchingStatuses.Fulfilled) {
-      console.log('fulfilled');
-
-      toast.success('Todo added successfully');
+      toast.success('Todo was added');
       toggle();
     }
   };

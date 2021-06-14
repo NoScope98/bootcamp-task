@@ -76,11 +76,11 @@ export const update = createAsyncThunk<
   }
 });
 
-export const remove = createAsyncThunk<undefined, ITodo['id']>(
+export const remove = createAsyncThunk<undefined, { id: ITodo['id'] }>(
   `${sliceName}/remove`,
   async (args, thunkAPI) => {
     try {
-      const response = await todosApi.delete(args);
+      const response = await todosApi.delete(args.id);
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
@@ -108,7 +108,7 @@ export const slice = createSlice({
         });
       })
       .addCase(remove.fulfilled, (state, action) => {
-        adapter.removeOne(state, action.meta.arg);
+        adapter.removeOne(state, action.meta.arg.id);
       })
 
       .addMatcher(isFulfilled, (state) => {
