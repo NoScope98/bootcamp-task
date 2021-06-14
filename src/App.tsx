@@ -33,22 +33,24 @@ export const App = () => {
         <Loader show={isLoading} />
 
         {isAuthenticated && <NavBar />}
-        <main className="content">
-          <Switch>
-            <Route path={routes.login}>
-              <LoginForm />
-            </Route>
-            <PrivateRoute path={routes.todos}>
-              <TodoList />
-            </PrivateRoute>
-            <PrivateRoute onlyForAdmin path={routes.users}>
-              <Users />
-            </PrivateRoute>
-            <PrivateRoute path={routes.root}>
-              <Redirect to={routes.todos} />
-            </PrivateRoute>
-          </Switch>
-        </main>
+        <div className="container">
+          <main className="main-content">
+            <Switch>
+              <Route path={routes.login}>
+                <LoginForm />
+              </Route>
+              <PrivateRoute path={routes.todos}>
+                <TodoList />
+              </PrivateRoute>
+              <PrivateRoute onlyForAdmin path={routes.users}>
+                <Users />
+              </PrivateRoute>
+              <PrivateRoute path={routes.root}>
+                <Redirect to={routes.todos} />
+              </PrivateRoute>
+            </Switch>
+          </main>
+        </div>
 
         <ToastContainer position="bottom-right" />
       </BrowserRouter>
