@@ -1,15 +1,15 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { AppDispatch } from '../../app/store';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { RootState } from '../../app/store';
 import { FetchingStatuses, Roles } from '../../utils/constants';
 import { handleError } from '../../utils/functionWrappers';
 import { ITodo } from '../../utils/types';
-import { remove } from './todosSlice';
+import { remove, todoSelectors } from './todosSlice';
 
 interface ITodoProps extends ITodo {
-  role: Roles;
-  status: FetchingStatuses;
-  dispatch: AppDispatch;
+  updateButtonDisabled: boolean;
+  onUpdateClick: () => void;
 }
 
 export const Todo: React.FunctionComponent<ITodoProps> = ({
@@ -17,11 +17,15 @@ export const Todo: React.FunctionComponent<ITodoProps> = ({
   title,
   description,
   createdBy,
-  role,
-  status,
-  dispatch,
+  updateButtonDisabled,
+  onUpdateClick,
 }: ITodoProps) => {
-  const showDeleteButton = role === Roles.Admin || role === createdBy;
+  const dispatch = useAppDispatch();
+
+  const status = useAppSelector(todoSelectors.selectStatus);
+  const { role } = useAppSelector((state: RootState) => state.auth);
+
+  const showControls = role === Roles.Admin || role === createdBy;
 
   const handleDeleteTodoClick = async () => {
     if (status === FetchingStatuses.Pending) return;
@@ -38,8 +42,13 @@ export const Todo: React.FunctionComponent<ITodoProps> = ({
       <div>{title}</div>
       <div>{description}</div>
       <div>{createdBy}</div>
-      {showDeleteButton && (
-        <button onClick={handleDeleteTodoClick}>Delete todo</button>
+      {showControls && (
+        <>
+          <button onClick={onUpdateClick} disabled={updateButtonDisabled}>
+            Update todo
+          </button>
+          <button onClick={handleDeleteTodoClick}>Delete todo</button>
+        </>
       )}
     </div>
   );
