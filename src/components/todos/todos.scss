@@ -1,0 +1,13 @@
+@import '../../variables.scss';
+
+.todo {
+  width: 300px;
+  border: 2px solid $secondary-color;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+
+  &_template {
+    border: 2px dashed gray;
+  }
+}
