@@ -5,6 +5,16 @@ export interface ITodo {
   createdBy: string;
 }
 
+export interface ITodoCreateRequest {
+  title: ITodo['title'];
+  description: ITodo['description'];
+}
+
+export interface ITodoUpdateRequest {
+  title: ITodo['title'];
+  description: ITodo['description'];
+}
+
 export interface IAuthData {
   name: string;
   role: string;

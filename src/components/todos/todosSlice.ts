@@ -2,11 +2,18 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
+  isFulfilled,
+  isPending,
+  isRejectedWithValue,
 } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { todosApi } from './todosApi';
 import { FetchingStatuses } from '../../utils/constants';
-import { ITodo } from '../../utils/types';
+import {
+  ITodo,
+  ITodoCreateRequest,
+  ITodoUpdateRequest,
+} from '../../utils/types';
 
 const sliceName = 'todos';
 
@@ -32,21 +39,86 @@ export const fetchAll = createAsyncThunk<ITodo[], undefined>(
   }
 );
 
-const slice = createSlice({
+export const create = createAsyncThunk<ITodo, ITodoCreateRequest>(
+  `${sliceName}/create`,
+  async (args, thunkAPI) => {
+    try {
+      const response = await todosApi.create(args);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const fetchById = createAsyncThunk<ITodo, ITodo['id']>(
+  `${sliceName}/fetchById`,
+  async (args, thunkAPI) => {
+    try {
+      const response = await todosApi.getById(args);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const update = createAsyncThunk<
+  undefined,
+  { id: ITodo['id'] } & ITodoUpdateRequest
+>(`${sliceName}/update`, async (args, thunkAPI) => {
+  try {
+    const { id, ...params } = args;
+    const response = await todosApi.update(id, params);
+    return response.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data);
+  }
+});
+
+export const remove = createAsyncThunk<undefined, ITodo['id']>(
+  `${sliceName}/remove`,
+  async (args, thunkAPI) => {
+    try {
+      const response = await todosApi.delete(args);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const slice = createSlice({
   name: sliceName,
   initialState: adapter.getInitialState(initialState),
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAll.fulfilled, (state, action) => {
+      .addCase(fetchAll.fulfilled, adapter.setAll)
+      .addCase(create.fulfilled, adapter.upsertOne)
+      .addCase(fetchById.fulfilled, adapter.upsertOne)
+      .addCase(update.fulfilled, (state, action) => {
+        const { id, title, description } = action.meta.arg;
+        adapter.updateOne(state, {
+          id,
+          changes: {
+            title,
+            description,
+          },
+        });
+      })
+      .addCase(remove.fulfilled, (state, action) => {
+        adapter.removeOne(state, action.meta.arg);
+      })
+
+      .addMatcher(isFulfilled, (state) => {
         state.status = FetchingStatuses.Fulfilled;
-        adapter.setAll(state, action);
       })
-      .addCase(fetchAll.rejected, (state, action) => {
-        state.status = FetchingStatuses.Rejected;
-      })
-      .addCase(fetchAll.pending, (state, action) => {
+      .addMatcher(isPending, (state) => {
         state.status = FetchingStatuses.Pending;
+      })
+      .addMatcher(isRejectedWithValue, (state) => {
+        state.status = FetchingStatuses.Rejected;
       });
   },
 });
