@@ -6,9 +6,10 @@ export const handleError = (invokedDispatch: any) => {
     if (err.status === 401) {
       toast.info("You're not authenticated, please login");
     } else if (err.status === 403) {
-      toast.info("You're not authorized, please login");
+      toast.info("You're not authorized");
     } else {
-      toast.error('Something went wrong, please try again');
+      const message = err.message || 'Something went wrong, please try again';
+      toast.error(message);
     }
   });
 };
