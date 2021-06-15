@@ -2,6 +2,8 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
+import { EditIcon } from '../../icons/EditIcon';
+import { TrashIcon } from '../../icons/TrashIcon';
 import { FetchingStatuses, Roles } from '../../utils/constants';
 import { handleError } from '../../utils/functionWrappers';
 import { ITodo } from '../../utils/types';
@@ -39,17 +41,25 @@ export const Todo: React.FunctionComponent<ITodoProps> = ({
 
   return (
     <div className="todo">
-      <div>{title}</div>
-      <div>{description}</div>
-      <div>{createdBy}</div>
-      {showControls && (
-        <>
-          <button onClick={onUpdateClick} disabled={updateButtonDisabled}>
-            Update todo
-          </button>
-          <button onClick={handleDeleteTodoClick}>Delete todo</button>
-        </>
-      )}
+      <div className="todo__header">{title}</div>
+      <div className="todo__content">{description}</div>
+      <div className="todo__footer">
+        {createdBy}
+        {showControls && (
+          <div>
+            <button
+              onClick={onUpdateClick}
+              disabled={updateButtonDisabled}
+              className="todo__control"
+            >
+              <EditIcon />
+            </button>
+            <button onClick={handleDeleteTodoClick} className="todo__control">
+              <TrashIcon />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
