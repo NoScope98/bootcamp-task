@@ -5,6 +5,7 @@ import { signIn } from '../../auth/authSlice';
 import { FetchingStatuses, routes } from '../../utils/constants';
 import { RootState } from '../../app/store';
 import { handleError } from '../../utils/functionWrappers';
+import './loginForm.scss';
 
 interface LocationState {
   from: {
@@ -51,28 +52,41 @@ export const LoginForm = () => {
   }
 
   return (
-    <div className="login-form">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="login">Login:</label>
+    <section>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <label className="form__label" htmlFor="login">
+          Login:
+        </label>
         <div>
           <input
+            className="form__input"
             id="login"
             type="text"
             value={login}
             onChange={handleLoginChange}
           />
         </div>
-        <label htmlFor="password">Password:</label>
+        <label className="form__label" htmlFor="password">
+          Password:
+        </label>
         <div>
           <input
+            className="form__input"
             id="password"
             type="password"
             value={password}
             onChange={handlePasswordChange}
           />
         </div>
-        <input type="submit" value="Sign in" disabled={submitDisabled} />
+        <button
+          className="button"
+          type="submit"
+          value="Sign in"
+          disabled={submitDisabled}
+        >
+          Sign in
+        </button>
       </form>
-    </div>
+    </section>
   );
 };

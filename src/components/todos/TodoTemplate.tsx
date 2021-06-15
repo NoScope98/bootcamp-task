@@ -87,12 +87,22 @@ export const TodoTemplate: React.FunctionComponent<ITodoTemplateProps> = ({
     }
   };
 
+  const getControlId = (prefix: string): string => {
+    if (mode === Mode.Update) return prefix + id;
+    return prefix;
+  };
+
   if (!show) return null;
 
   return (
     <div className="todo todo_template">
       <div>
+        <label className="form__label" htmlFor={getControlId('title')}>
+          Title:
+        </label>
         <input
+          id={getControlId('title')}
+          className="form__input"
           type="text"
           placeholder="Title"
           onChange={handleTitleChange}
@@ -100,17 +110,29 @@ export const TodoTemplate: React.FunctionComponent<ITodoTemplateProps> = ({
         />
       </div>
       <div>
+        <label className="form__label" htmlFor={getControlId('description')}>
+          Description:
+        </label>
         <input
+          id={getControlId('description')}
+          className="form__input"
           type="text"
           placeholder="Description"
           onChange={handleDescriptionChange}
           value={description}
         />
       </div>
-      <button type="submit" onClick={handleSubmit} disabled={submitDisabled()}>
+      <button
+        className="button"
+        type="submit"
+        onClick={handleSubmit}
+        disabled={submitDisabled()}
+      >
         {submitText[mode]}
       </button>
-      <button onClick={toggle}>Cancel</button>
+      <button className="button button_secondary" onClick={toggle}>
+        Cancel
+      </button>
     </div>
   );
 };

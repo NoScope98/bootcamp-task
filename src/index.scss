@@ -31,3 +31,42 @@ body {
   -moz-box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
   box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
 }
+
+.button {
+  background-color: $secondary-color;
+  border: none;
+  color: $primary-bg-color;
+  padding: 0 1em;
+  margin-right: 0.5em;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 40px;
+
+  &_secondary {
+    background-color: $secondary-bg-color;
+    color: black;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.form__input {
+  display: block;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border: 2px solid $secondary-color;
+  border-radius: 10px;
+  background-color: $primary-bg-color;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.form__label {
+  padding: 0.5em;
+}

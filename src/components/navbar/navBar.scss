@@ -60,14 +60,6 @@
 
   &__button {
     position: relative;
-    background-color: $secondary-color;
-    border: none;
-    color: $primary-bg-color;
-    padding: 0 1em;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 8px;
-    height: 40px;
     -webkit-transition-duration: 0.1s;
     transition-duration: 0.1s;
     overflow: hidden;

@@ -48,7 +48,10 @@ export const NavBar = () => {
         </nav>
         <div className="logout-block">
           <div className="logout-block__username">{name}</div>
-          <button className="logout-block__button" onClick={handleLogoutClick}>
+          <button
+            className="button logout-block__button"
+            onClick={handleLogoutClick}
+          >
             Logout
           </button>
         </div>

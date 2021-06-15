@@ -75,7 +75,11 @@ export const TodoList: React.FunctionComponent<ITodoListProps> = (
 
   return (
     <div className="todo-list">
-      <button onClick={toggleCreateMode} disabled={isCreating}>
+      <button
+        className="button"
+        onClick={toggleCreateMode}
+        disabled={isCreating}
+      >
         Add todo
       </button>
 
