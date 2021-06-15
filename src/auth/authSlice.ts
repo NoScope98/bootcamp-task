@@ -49,7 +49,8 @@ export const signOut = createAsyncThunk(
       const response = await authApi.logout();
       return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      const { status, message } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
     }
   }
 );
@@ -80,6 +81,13 @@ const slice = createSlice({
       })
       .addCase(signOut.fulfilled, (state, action) => {
         state.isAuthenticated = false;
+      })
+      .addCase(signOut.rejected, (state, action: any) => {
+        if (action.payload.status === 400) {
+          state.name = initialState.name;
+          state.role = initialState.role;
+          state.isAuthenticated = false;
+        }
       })
       .addCase(checkAuthorization.fulfilled, (state, action) => {
         state.name = action.payload.name;
