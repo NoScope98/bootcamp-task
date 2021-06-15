@@ -1,4 +1,5 @@
 {
+  "homepage": "http://NoScope98.github.io/to-do",
   "name": "to-do",
   "version": "0.1.0",
   "private": true,
@@ -25,6 +26,8 @@
     "typescript": "^4.1.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -46,6 +49,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.7"
+    "@types/react-router-dom": "^5.1.7",
+    "gh-pages": "^3.2.1"
   }
 }
