@@ -17,15 +17,24 @@ import { Users } from './components/users/Users';
 export const App = () => {
   const dispatch = useAppDispatch();
 
-  const { isAuthenticated, status } = useAppSelector(
+  const { isAuthenticated, status: statusAuth } = useAppSelector(
     (state: RootState) => state.auth
+  );
+  const { status: statusTodos } = useAppSelector(
+    (state: RootState) => state.todos
+  );
+  const { status: statusUsers } = useAppSelector(
+    (state: RootState) => state.users
   );
 
   useEffect(() => {
     handleError(dispatch(checkAuthorization()));
   }, [dispatch]);
 
-  const isLoading = status === FetchingStatuses.Pending;
+  const isLoading =
+    statusAuth === FetchingStatuses.Pending ||
+    statusTodos === FetchingStatuses.Pending ||
+    statusUsers === FetchingStatuses.Pending;
 
   return (
     <>
