@@ -8,12 +8,24 @@ import './navBar.scss';
 
 export const NavBar = () => {
   const dispatch = useAppDispatch();
-  const { status, role, name } = useAppSelector(
-    (state: RootState) => state.auth
+  const {
+    status: authStatus,
+    role,
+    name,
+  } = useAppSelector((state: RootState) => state.auth);
+  const { status: todosStatus } = useAppSelector(
+    (state: RootState) => state.todos
+  );
+  const { status: usersStatus } = useAppSelector(
+    (state: RootState) => state.users
   );
 
+  const isLogoutButtonDisabled =
+    todosStatus === FetchingStatuses.Pending ||
+    usersStatus === FetchingStatuses.Pending ||
+    authStatus === FetchingStatuses.Pending;
+
   const handleLogoutClick = () => {
-    if (status === FetchingStatuses.Pending) return;
     handleError(dispatch(signOut()));
   };
 
@@ -51,6 +63,7 @@ export const NavBar = () => {
           <button
             className="button logout-block__button"
             onClick={handleLogoutClick}
+            disabled={isLogoutButtonDisabled}
           >
             Logout
           </button>
