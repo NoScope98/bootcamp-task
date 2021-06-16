@@ -27,7 +27,7 @@ export interface ILoginRequest {
   password: string;
 }
 
-export interface IErrorResponse {
-  code: number;
-  message: string;
+export interface IError {
+  status: number;
+  message?: string;
 }

@@ -13,7 +13,7 @@ import {
   remove,
 } from '../components/todos/todosSlice';
 import { FetchingStatuses, Roles } from '../utils/constants';
-import { IAuthData, ILoginRequest } from '../utils/types';
+import { IAuthData, IError, ILoginRequest } from '../utils/types';
 import { authApi } from './authApi';
 
 const sliceName = 'auth';
@@ -30,43 +30,64 @@ const initialState: IAuthState = {
   isAuthenticated: false,
 };
 
-export const signIn = createAsyncThunk<IAuthData, ILoginRequest>(
-  `${sliceName}/signIn`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await authApi.login(args);
-      return response.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
-    }
+export const signIn = createAsyncThunk<
+  IAuthData,
+  ILoginRequest,
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/signIn`, async (args, thunkAPI) => {
+  try {
+    const response = await authApi.login(args);
+    return response.data;
+  } catch (err) {
+    console.log(err.response);
 
-export const signOut = createAsyncThunk(
-  `${sliceName}/signOut`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await authApi.logout();
-      return response.data;
-    } catch (err) {
-      const { status, message } = err.response;
-      return thunkAPI.rejectWithValue({ status, message });
-    }
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
   }
-);
+});
 
-export const checkAuthorization = createAsyncThunk<IAuthData, undefined>(
-  `${sliceName}/checkAuthorization`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await authApi.me();
-      return response.data;
-    } catch (err) {
-      const { data, status } = err.response;
-      return thunkAPI.rejectWithValue({ data, status });
-    }
+export const signOut = createAsyncThunk<
+  void,
+  void,
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/signOut`, async (args, thunkAPI) => {
+  try {
+    const response = await authApi.logout();
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
+
+export const checkAuthorization = createAsyncThunk<
+  IAuthData,
+  void,
+  {
+    rejectValue: IError;
+  }
+>(`${sliceName}/checkAuthorization`, async (args, thunkAPI) => {
+  try {
+    const response = await authApi.me();
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
 
 const slice = createSlice({
   name: sliceName,
@@ -82,8 +103,8 @@ const slice = createSlice({
       .addCase(signOut.fulfilled, (state, action) => {
         state.isAuthenticated = false;
       })
-      .addCase(signOut.rejected, (state, action: any) => {
-        if (action.payload.status === 400) {
+      .addCase(signOut.rejected, (state, action) => {
+        if (action.payload?.status === 400) {
           state.name = initialState.name;
           state.role = initialState.role;
           state.isAuthenticated = false;
@@ -94,8 +115,8 @@ const slice = createSlice({
         state.role = action.payload.role;
         state.isAuthenticated = true;
       })
-      .addCase(checkAuthorization.rejected, (state, action: any) => {
-        if (action.payload.status === 401) {
+      .addCase(checkAuthorization.rejected, (state, action) => {
+        if (action.payload?.status === 401) {
           state.name = initialState.name;
           state.role = initialState.role;
           state.isAuthenticated = false;
@@ -114,8 +135,8 @@ const slice = createSlice({
 
       .addMatcher(
         isRejected(fetchAll, create, fetchById, update, remove),
-        (state, action: any) => {
-          if (action.payload.status === 401) {
+        (state, action) => {
+          if (action.payload?.status === 401) {
             state.name = initialState.name;
             state.role = initialState.role;
             state.isAuthenticated = false;

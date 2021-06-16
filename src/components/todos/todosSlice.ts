@@ -10,6 +10,7 @@ import { RootState } from '../../app/store';
 import { todosApi } from './todosApi';
 import { FetchingStatuses } from '../../utils/constants';
 import {
+  IError,
   ITodo,
   ITodoCreateRequest,
   ITodoUpdateRequest,
@@ -27,71 +28,101 @@ const initialState: ITodosState = {
   status: FetchingStatuses.Idle,
 };
 
-export const fetchAll = createAsyncThunk<ITodo[], undefined>(
-  `${sliceName}/fetchAll`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await todosApi.getAll();
-      return response.data;
-    } catch (err) {
-      const { status, message } = err.response;
-      return thunkAPI.rejectWithValue({ status, message });
-    }
+export const fetchAll = createAsyncThunk<
+  ITodo[],
+  void,
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/fetchAll`, async (args, thunkAPI) => {
+  try {
+    const response = await todosApi.getAll();
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
 
-export const create = createAsyncThunk<ITodo, ITodoCreateRequest>(
-  `${sliceName}/create`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await todosApi.create(args);
-      return response.data;
-    } catch (err) {
-      const { status, message } = err.response;
-      return thunkAPI.rejectWithValue({ status, message });
-    }
+export const create = createAsyncThunk<
+  ITodo,
+  ITodoCreateRequest,
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/create`, async (args, thunkAPI) => {
+  try {
+    const response = await todosApi.create(args);
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
 
-export const fetchById = createAsyncThunk<ITodo, ITodo['id']>(
-  `${sliceName}/fetchById`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await todosApi.getById(args);
-      return response.data;
-    } catch (err) {
-      const { status, message } = err.response;
-      return thunkAPI.rejectWithValue({ status, message });
-    }
+export const fetchById = createAsyncThunk<
+  ITodo,
+  ITodo['id'],
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/fetchById`, async (args, thunkAPI) => {
+  try {
+    const response = await todosApi.getById(args);
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
 
 export const update = createAsyncThunk<
-  undefined,
-  { id: ITodo['id'] } & ITodoUpdateRequest
+  void,
+  { id: ITodo['id'] } & ITodoUpdateRequest,
+  {
+    rejectValue: IError;
+  }
 >(`${sliceName}/update`, async (args, thunkAPI) => {
   try {
     const { id, ...params } = args;
     const response = await todosApi.update(id, params);
     return response.data;
   } catch (err) {
-    const { status, message } = err.response;
+    const {
+      status,
+      data: { message },
+    } = err.response;
     return thunkAPI.rejectWithValue({ status, message });
   }
 });
 
-export const remove = createAsyncThunk<undefined, { id: ITodo['id'] }>(
-  `${sliceName}/remove`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await todosApi.delete(args.id);
-      return response.data;
-    } catch (err) {
-      const { status, message } = err.response;
-      return thunkAPI.rejectWithValue({ status, message });
-    }
+export const remove = createAsyncThunk<
+  void,
+  { id: ITodo['id'] },
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/remove`, async (args, thunkAPI) => {
+  try {
+    const response = await todosApi.delete(args.id);
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
 
 export const slice = createSlice({
   name: sliceName,

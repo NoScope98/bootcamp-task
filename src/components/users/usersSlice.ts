@@ -9,7 +9,7 @@ import {
 import { RootState } from '../../app/store';
 import { usersApi } from './usersApi';
 import { FetchingStatuses } from '../../utils/constants';
-import { IAuthData } from '../../utils/types';
+import { IAuthData, IError } from '../../utils/types';
 
 const sliceName = 'users';
 
@@ -25,18 +25,24 @@ const initialState: IUsersState = {
   status: FetchingStatuses.Idle,
 };
 
-export const fetchAll = createAsyncThunk<IAuthData[], undefined>(
-  `${sliceName}/fetchAll`,
-  async (args, thunkAPI) => {
-    try {
-      const response = await usersApi.getAll();
-      return response.data;
-    } catch (err) {
-      const { status, message } = err.response;
-      return thunkAPI.rejectWithValue({ status, message });
-    }
+export const fetchAll = createAsyncThunk<
+  IAuthData[],
+  void,
+  {
+    rejectValue: IError;
   }
-);
+>(`${sliceName}/fetchAll`, async (args, thunkAPI) => {
+  try {
+    const response = await usersApi.getAll();
+    return response.data;
+  } catch (err) {
+    const {
+      status,
+      data: { message },
+    } = err.response;
+    return thunkAPI.rejectWithValue({ status, message });
+  }
+});
 
 export const slice = createSlice({
   name: sliceName,
