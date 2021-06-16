@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Roles } from '../../utils/constants';
+import { FetchingStatuses, Roles } from '../../utils/constants';
 import { handleError } from '../../utils/functionWrappers';
 import { fetchAll, userSelectors } from './usersSlice';
 import './users.scss';
 import adminIcon from '../../icons/admin.png';
 import userIcon from '../../icons/user.png';
+import { Loader } from '../common/loader/Loader';
+import { RootState } from '../../app/store';
 
 const iconMapping = {
   [Roles.Admin]: <img src={adminIcon} alt="adminIcon" />,
@@ -16,13 +18,17 @@ export const Users: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const users = useAppSelector(userSelectors.selectAll);
+  const { status } = useAppSelector((state: RootState) => state.users);
 
   useEffect(() => {
     handleError(dispatch(fetchAll()));
   }, [dispatch]);
 
+  const isLoading = status === FetchingStatuses.Pending;
+
   return (
     <article className="users">
+      <Loader show={isLoading} />
       {users.length === 0 && 'There are no available users'}
       <ul className="user-list">
         {users.map((user) => (

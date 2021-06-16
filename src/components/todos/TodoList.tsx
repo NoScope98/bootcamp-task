@@ -6,6 +6,9 @@ import { fetchAll, todoSelectors } from './todosSlice';
 import { Mode, TodoTemplate } from './TodoTemplate';
 import './todos.scss';
 import { ITodo } from '../../utils/types';
+import { RootState } from '../../app/store';
+import { FetchingStatuses } from '../../utils/constants';
+import { Loader } from '../common/loader/Loader';
 
 interface IUpdateMode {
   updatedId: ITodo['id'] | null;
@@ -22,6 +25,7 @@ export const TodoList: React.FunctionComponent = () => {
   });
 
   const todos = useAppSelector(todoSelectors.selectAll);
+  const { status } = useAppSelector((state: RootState) => state.todos);
 
   useEffect(() => {
     handleError(dispatch(fetchAll()));
@@ -67,8 +71,11 @@ export const TodoList: React.FunctionComponent = () => {
     );
   }, [todos, toggleUpdateMode, updateMode]);
 
+  const isLoading = status === FetchingStatuses.Pending;
+
   return (
     <div className="todo-list">
+      <Loader show={isLoading} />
       <button
         className="button"
         onClick={toggleCreateMode}
