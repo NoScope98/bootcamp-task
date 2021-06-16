@@ -37,16 +37,20 @@
       color: $secondary-color;
       padding: 1em;
 
-      &:active {
+      &:active:not(&_disabled) {
         color: $primary-color;
       }
 
-      &:hover {
+      &:hover:not(&_disabled) {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
       }
 
       &_active {
         font-weight: bolder;
+      }
+
+      &_disabled {
+        opacity: 0.5;
       }
     }
   }

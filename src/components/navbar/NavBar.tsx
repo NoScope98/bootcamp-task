@@ -5,6 +5,7 @@ import { signOut } from '../../auth/authSlice';
 import { handleError } from '../../utils/functionWrappers';
 import { RootState } from '../../app/store';
 import './navBar.scss';
+import { useState } from 'react';
 
 export const NavBar = () => {
   const dispatch = useAppDispatch();
@@ -20,13 +21,20 @@ export const NavBar = () => {
     (state: RootState) => state.users
   );
 
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const isLogoutButtonDisabled =
     todosStatus === FetchingStatuses.Pending ||
     usersStatus === FetchingStatuses.Pending ||
     authStatus === FetchingStatuses.Pending;
 
-  const handleLogoutClick = () => {
-    handleError(dispatch(signOut()));
+  const handleLogoutClick = async () => {
+    setIsLoggingOut(true);
+    await handleError(dispatch(signOut()));
+  };
+
+  const handleLinkClick = (e: any) => {
+    if (isLoggingOut) e.preventDefault();
   };
 
   const isAdmin = role === Roles.Admin;
@@ -38,9 +46,10 @@ export const NavBar = () => {
           <ul className="nav__links">
             <li>
               <NavLink
-                className="link"
+                className={`link ${isLoggingOut && 'link_disabled'}`}
                 activeClassName="link_active"
                 to={routes.todos}
+                onClick={handleLinkClick}
               >
                 Todos
               </NavLink>
@@ -48,9 +57,10 @@ export const NavBar = () => {
             {isAdmin && (
               <li>
                 <NavLink
-                  className="link"
+                  className={`link ${isLoggingOut && 'link_disabled'}`}
                   activeClassName="link_active"
                   to={routes.users}
+                  onClick={handleLinkClick}
                 >
                   Users
                 </NavLink>
