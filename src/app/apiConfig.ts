@@ -7,27 +7,13 @@ const config = {
 };
 
 const request = axios.create(config);
-const authorizedRequest = axios.create(config);
 
-const handleError = (error: any) => {
-  console.log('error: ' + error);
-  return Promise.reject(error);
-};
-
-authorizedRequest.interceptors.request.use(async (config) => {
-  try {
-    await request.get('/me');
-    return config;
-  } catch (error) {
-    return handleError(error);
-  }
-}, handleError);
-
-authorizedRequest.interceptors.response.use(
+request.interceptors.response.use(
   (response) => response,
-  handleError
+  (error: any) => {
+    console.log('error: ' + error);
+    return Promise.reject(error);
+  }
 );
 
-request.interceptors.response.use((response) => response, handleError);
-
-export { request, authorizedRequest };
+export { request };

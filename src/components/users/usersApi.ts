@@ -1,7 +1,7 @@
-import { authorizedRequest } from '../../app/apiConfig';
+import { request } from '../../app/apiConfig';
 
 const resource = '/users';
 
 export const usersApi = {
-  getAll: () => authorizedRequest.get(resource),
+  getAll: () => request.get(resource),
 };

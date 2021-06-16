@@ -1,4 +1,4 @@
-import { authorizedRequest } from '../../app/apiConfig';
+import { request } from '../../app/apiConfig';
 import {
   ITodo,
   ITodoCreateRequest,
@@ -8,10 +8,10 @@ import {
 const resource = '/todos';
 
 export const todosApi = {
-  getAll: () => authorizedRequest.get(resource),
-  create: (data: ITodoCreateRequest) => authorizedRequest.post(resource, data),
-  getById: (id: ITodo['id']) => authorizedRequest.get(`${resource}/${id}`),
+  getAll: () => request.get(resource),
+  create: (data: ITodoCreateRequest) => request.post(resource, data),
+  getById: (id: ITodo['id']) => request.get(`${resource}/${id}`),
   update: (id: ITodo['id'], data: ITodoUpdateRequest) =>
-    authorizedRequest.put(`${resource}/${id}`, data),
-  delete: (id: ITodo['id']) => authorizedRequest.delete(`${resource}/${id}`),
+    request.put(`${resource}/${id}`, data),
+  delete: (id: ITodo['id']) => request.delete(`${resource}/${id}`),
 };
