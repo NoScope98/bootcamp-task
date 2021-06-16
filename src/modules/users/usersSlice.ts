@@ -31,18 +31,29 @@ export const fetchAll = createAsyncThunk<
   {
     rejectValue: IError;
   }
->(`${sliceName}/fetchAll`, async (args, thunkAPI) => {
-  try {
-    const response = await usersApi.getAll();
-    return response.data;
-  } catch (err) {
-    const {
-      status,
-      data: { message },
-    } = err.response;
-    return thunkAPI.rejectWithValue({ status, message });
+>(
+  `${sliceName}/fetchAll`,
+  async (args, thunkAPI) => {
+    try {
+      const response = await usersApi.getAll();
+      return response.data;
+    } catch (err) {
+      const {
+        status,
+        data: { message },
+      } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
+    }
+  },
+  {
+    condition: (args, { getState, extra }) => {
+      const { users } = getState() as RootState;
+      if (users.status === FetchingStatuses.Pending) {
+        return false;
+      }
+    },
   }
-});
+);
 
 export const slice = createSlice({
   name: sliceName,

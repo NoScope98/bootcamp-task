@@ -34,18 +34,29 @@ export const fetchAll = createAsyncThunk<
   {
     rejectValue: IError;
   }
->(`${sliceName}/fetchAll`, async (args, thunkAPI) => {
-  try {
-    const response = await todosApi.getAll();
-    return response.data;
-  } catch (err) {
-    const {
-      status,
-      data: { message },
-    } = err.response;
-    return thunkAPI.rejectWithValue({ status, message });
+>(
+  `${sliceName}/fetchAll`,
+  async (args, thunkAPI) => {
+    try {
+      const response = await todosApi.getAll();
+      return response.data;
+    } catch (err) {
+      const {
+        status,
+        data: { message },
+      } = err.response;
+      return thunkAPI.rejectWithValue({ status, message });
+    }
+  },
+  {
+    condition: (args, { getState, extra }) => {
+      const { todos } = getState() as RootState;
+      if (todos.status === FetchingStatuses.Pending) {
+        return false;
+      }
+    },
   }
-});
+);
 
 export const create = createAsyncThunk<
   ITodo,

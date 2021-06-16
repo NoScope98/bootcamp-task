@@ -4,6 +4,10 @@ import { IError } from './types';
 
 export const handleError = (invokedDispatch: Promise<any>) => {
   return invokedDispatch.then(unwrapResult).catch((err: IError) => {
+    if (err?.name === 'ConditionError') {
+      return;
+    }
+
     if (err.status === 401) {
       toast.info("You're not authenticated, please login");
     } else if (err.status === 403) {
