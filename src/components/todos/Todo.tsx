@@ -21,7 +21,7 @@ export const Todo: React.FunctionComponent<ITodoProps> = ({
   createdBy,
   updateButtonDisabled,
   onUpdateClick,
-}: ITodoProps) => {
+}) => {
   const dispatch = useAppDispatch();
 
   const status = useAppSelector(todoSelectors.selectStatus);

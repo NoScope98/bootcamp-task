@@ -2,7 +2,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { IError } from './types';
 
-export const handleError = (invokedDispatch: any) => {
+export const handleError = (invokedDispatch: Promise<any>) => {
   return invokedDispatch.then(unwrapResult).catch((err: IError) => {
     if (err.status === 401) {
       toast.info("You're not authenticated, please login");

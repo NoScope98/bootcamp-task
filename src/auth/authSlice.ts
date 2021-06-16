@@ -41,8 +41,6 @@ export const signIn = createAsyncThunk<
     const response = await authApi.login(args);
     return response.data;
   } catch (err) {
-    console.log(err.response);
-
     const {
       status,
       data: { message },

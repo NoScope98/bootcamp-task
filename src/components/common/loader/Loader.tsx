@@ -10,7 +10,7 @@ interface ILoaderProps {
 export const Loader: React.FunctionComponent<ILoaderProps> = ({
   show,
   message,
-}: ILoaderProps) => {
+}) => {
   if (!show) return null;
 
   return (

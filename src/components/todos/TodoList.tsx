@@ -7,16 +7,12 @@ import { Mode, TodoTemplate } from './TodoTemplate';
 import './todos.scss';
 import { ITodo } from '../../utils/types';
 
-interface ITodoListProps {}
-
 interface IUpdateMode {
   updatedId: ITodo['id'] | null;
   show: boolean;
 }
 
-export const TodoList: React.FunctionComponent<ITodoListProps> = (
-  props: ITodoListProps
-) => {
+export const TodoList: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -36,8 +32,6 @@ export const TodoList: React.FunctionComponent<ITodoListProps> = (
   };
   const toggleUpdateMode = useCallback(
     (id: ITodo['id']) => () => {
-      console.log(updateMode.show);
-
       if (updateMode.show) {
         setUpdateMode({ updatedId: null, show: false });
       } else {

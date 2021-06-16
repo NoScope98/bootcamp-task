@@ -37,7 +37,7 @@ export const TodoTemplate: React.FunctionComponent<ITodoTemplateProps> = ({
   show,
   toggle,
   mode,
-}: ITodoTemplateProps) => {
+}) => {
   const dispatch = useAppDispatch();
   const status = useAppSelector(todoSelectors.selectStatus);
 
