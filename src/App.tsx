@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { NavBar } from './components/navbar/NavBar';
-import { TodoList } from './components/todos/TodoList';
+import { NavBar } from './modules/navbar/NavBar';
+import { TodoList } from './modules/todos/TodoList';
 import { FetchingStatuses, routes } from './utils/constants';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { LoginForm } from './components/loginForm/LoginForm';
-import { PrivateRoute } from './components/common/PrivateRoute';
-import { Loader } from './components/common/loader/Loader';
+import { LoginForm } from './modules/loginForm/LoginForm';
+import { PrivateRoute } from './sharedComponents/PrivateRoute';
+import { Loader } from './sharedComponents/loader/Loader';
 import { checkAuthorization } from './auth/authSlice';
 import { RootState } from './app/store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { handleError } from './utils/functionWrappers';
-import { Users } from './components/users/Users';
+import { Users } from './modules/users/Users';
 
 export const App = () => {
   const dispatch = useAppDispatch();

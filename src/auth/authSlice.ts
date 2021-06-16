@@ -11,7 +11,7 @@ import {
   fetchById,
   update,
   remove,
-} from '../components/todos/todosSlice';
+} from '../modules/todos/todosSlice';
 import { FetchingStatuses, Roles } from '../utils/constants';
 import { IAuthData, IError, ILoginRequest } from '../utils/types';
 import { authApi } from './authApi';

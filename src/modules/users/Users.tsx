@@ -6,7 +6,7 @@ import { fetchAll, userSelectors } from './usersSlice';
 import './users.scss';
 import adminIcon from '../../icons/admin.png';
 import userIcon from '../../icons/user.png';
-import { Loader } from '../common/loader/Loader';
+import { Loader } from '../../sharedComponents/loader/Loader';
 import { RootState } from '../../app/store';
 
 const iconMapping = {

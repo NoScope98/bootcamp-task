@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../app/hooks';
 import { Redirect, Route } from 'react-router-dom';
-import { Roles, routes } from '../../utils/constants';
+import { Roles, routes } from '../utils/constants';
 
 interface IPrivateRouteProps {
   path: string;

@@ -8,7 +8,7 @@ import './todos.scss';
 import { ITodo } from '../../utils/types';
 import { RootState } from '../../app/store';
 import { FetchingStatuses } from '../../utils/constants';
-import { Loader } from '../common/loader/Loader';
+import { Loader } from '../../sharedComponents/loader/Loader';
 
 interface IUpdateMode {
   updatedId: ITodo['id'] | null;
