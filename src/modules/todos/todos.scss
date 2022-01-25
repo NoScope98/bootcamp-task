@@ -1,0 +1,50 @@
+@import '../../variables.scss';
+
+.todo-list {
+  padding: 0.5em 8em;
+
+  @media (max-width: 992px) {
+    padding-left: 5em;
+    padding-right: 5em;
+  }
+
+  @media (max-width: 576px) {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+}
+
+.todo {
+  min-width: 300px;
+  border: 2px solid $secondary-color;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+
+  &_template {
+    border: 2px dashed gray;
+  }
+
+  &__header {
+    font-weight: 500;
+    font-size: 20px;
+  }
+  &__content {
+    padding: 15px 0;
+  }
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgb(128, 128, 128);
+  }
+  &__control {
+    background-color: $primary-bg-color;
+    border: none;
+    color: $primary-bg-color;
+    padding: 0 1em;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+  }
+}

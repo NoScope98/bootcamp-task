@@ -1,0 +1,72 @@
+@import './variables.scss';
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 25% 1fr 25%;
+  grid-template-rows: 1fr;
+  grid-auto-flow: row;
+  grid-template-areas: '. main-content .';
+
+  min-height: calc(100vh - 54px);
+  background-color: $secondary-bg-color;
+}
+
+.main-content {
+  grid-area: main-content;
+
+  background-color: $primary-bg-color;
+  -webkit-box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
+}
+
+.button {
+  background-color: $secondary-color;
+  border: none;
+  color: $primary-bg-color;
+  padding: 0 1em;
+  margin-right: 0.5em;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 40px;
+
+  &_secondary {
+    background-color: $secondary-bg-color;
+    color: black;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.form__input {
+  display: block;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border: 2px solid $secondary-color;
+  border-radius: 10px;
+  background-color: $primary-bg-color;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.form__label {
+  padding: 0.5em;
+}

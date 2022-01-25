@@ -1,4 +1,5 @@
 {
+  "homepage": "http://NoScope98.github.io/to-do",
   "name": "to-do",
   "version": "0.1.0",
   "private": true,
@@ -12,13 +13,21 @@
     "@types/react": "^16.14.7",
     "@types/react-dom": "^16.9.13",
     "@types/react-redux": "^7.1.16",
+    "axios": "^0.21.1",
+    "node-sass": "^6.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-spinners": "^0.11.0",
+    "react-toastify": "^7.0.4",
+    "sass": "^1.34.1",
     "typescript": "^4.1.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -38,5 +47,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.7",
+    "gh-pages": "^3.2.1"
   }
 }

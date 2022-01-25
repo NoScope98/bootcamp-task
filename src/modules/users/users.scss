@@ -1,0 +1,15 @@
+.users {
+  padding: 2em;
+
+  .user-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1em;
+    }
+  }
+}

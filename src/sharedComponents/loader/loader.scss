@@ -1,0 +1,23 @@
+@import '../../variables.scss';
+
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  background-color: $primary-bg-color-transparent;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    color: $secondary-color;
+    font-size: 32px;
+  }
+}
